@@ -1,5 +1,5 @@
 use crate::stm32f4xx::peripherals::rccdef::RCC;
-use crate::stm32f4xx::peripherals::gpiodef::{GPIOA, GPIOE, GpioTypedef};
+use crate::stm32f4xx::peripherals::gpiodef::*;
 /* Gpio modes */
 #[allow(dead_code)]
 pub const INPUT: u32 = 0;
@@ -34,12 +34,12 @@ pub const PULL_UP: u32 = 1;
 #[allow(dead_code)]
 pub const PULL_DOWN: u32 = 2;
 
-
+#[allow(dead_code)]
 pub struct Gpio {
     pin_number: u32,
     port: GpioTypedef
 }
-
+#[allow(dead_code)]
 pub struct GpioConfig {
     pub mode: u32,
     pub otyper: u32,
@@ -47,7 +47,7 @@ pub struct GpioConfig {
     pub pupdr: u32,
     pub alt_func_sel: u32
 }
-
+#[allow(dead_code)]
 pub fn new_gpio(port: GpioTypedef, pin_number: u32) -> Gpio{
     Gpio {
         pin_number,
@@ -95,15 +95,22 @@ impl Gpio {
         }
 
     }
-    #[allow(dead_code)]
+
     fn enable_rcc(&self){
-        if self.port == GPIOA {
-            RCC.ahb1enr.set_bits(1 << 0)
+
+        match self.port {
+            GPIOA => RCC.ahb1enr.set_bits(1 << 0),
+            GPIOB => RCC.ahb1enr.set_bits(1 << 1),
+            GPIOC => RCC.ahb1enr.set_bits(1 << 2),
+            GPIOD => RCC.ahb1enr.set_bits(1 << 3),
+            GPIOE => RCC.ahb1enr.set_bits(1 << 4),
+            GPIOF => RCC.ahb1enr.set_bits(1 << 5),
+            GPIOG => RCC.ahb1enr.set_bits(1 << 6),
+            GPIOH => RCC.ahb1enr.set_bits(1 << 7),
+            GPIOI => RCC.ahb1enr.set_bits(1 << 8),
+            _ => {},
         }
 
-        if self.port == GPIOE {
-            RCC.ahb1enr.set_bits(1 << 4)
-        }
     }
 
 }

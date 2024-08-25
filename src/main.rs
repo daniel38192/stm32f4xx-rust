@@ -13,45 +13,49 @@ use stm32f4xx::peripherals::gpiodef::{GPIOA, GPIOE};
 
 use stm32f4xx::drivers::gpio::*;
 
+const LEDCONFIG: GpioConfig = GpioConfig {
+    mode: OUTPUT,
+    otyper: PUSH_PULL,
+    ospeedr: LOW_SPEED,
+    pupdr: NO_PULL_UP_DOWN,
+    alt_func_sel:0
+};
+
+const BUTTONCONFIG: GpioConfig = GpioConfig {
+    mode: INPUT,
+    otyper: PUSH_PULL,
+    ospeedr: LOW_SPEED,
+    pupdr: PULL_UP,
+    alt_func_sel:0
+};
 
 #[entry]
 fn main()  -> ! {
 
     system_init();
 
-    //RCC.ahb1enr.set_bits(1 << 0);
-
-    //GPIOA.moder.set_bits(1 << 14);
-    //GPIOA.moder.set_bits(1 << 12);
-
-    //GPIOA.bsrr.set_bits(1 << 6);
 
     let led1 = new_gpio(GPIOA, 7);
     let led2 = new_gpio(GPIOA, 6);
-
-    led1.configure(GpioConfig {mode: OUTPUT, otyper: PUSH_PULL, ospeedr: LOW_SPEED, pupdr: NO_PULL_UP_DOWN, alt_func_sel:0});
-    led2.configure(GpioConfig {mode: OUTPUT, otyper: PUSH_PULL, ospeedr: LOW_SPEED, pupdr: NO_PULL_UP_DOWN, alt_func_sel:0});
-
     let button1 = new_gpio(GPIOE, 3);
     let button2 = new_gpio(GPIOE, 4);
 
-    button1.configure(GpioConfig {mode: INPUT, otyper: PUSH_PULL, ospeedr: LOW_SPEED, pupdr: PULL_UP, alt_func_sel:0});
-    button2.configure(GpioConfig {mode: INPUT, otyper: PUSH_PULL, ospeedr: LOW_SPEED, pupdr: PULL_UP, alt_func_sel:0});
-
-    led1.high();
-    led2.high();
+    led1.configure(LEDCONFIG);
+    led2.configure(LEDCONFIG);
+    button1.configure(BUTTONCONFIG);
+    button2.configure(BUTTONCONFIG);
 
     loop {
         if button1.get() {
-            led1.low()
-        } else {
             led1.high()
+        } else {
+            led1.low()
         }
 
         if button2.get() {
-            led2.low()
-        } else {
             led2.high()
+        } else {
+            led2.low()
         }
     }
 }
