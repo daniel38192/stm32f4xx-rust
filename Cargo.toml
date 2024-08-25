@@ -1,5 +1,5 @@
 [package]
-name = "stm32-leds1"
+name = "stm32f4xx-leds1"
 version = "0.1.0"
 edition = "2021"
 
