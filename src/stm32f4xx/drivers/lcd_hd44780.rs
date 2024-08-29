@@ -95,6 +95,10 @@ impl Lcd8bit {
         non_exact_time_delay(200);
 
     }
+    #[allow(dead_code)]
+    pub fn clear(&self){
+        self.send_command(0x1);
+    }
     fn toggle_pins_char(&self, data: char){
         self.toggle_pins(data as u8)
     }
