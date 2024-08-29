@@ -9,9 +9,10 @@ use stm32f4xx::system::system_init;
 
 use stm32f4xx::drivers::gpio::*;
 use stm32f4xx::drivers::lcd_hd44780::Lcd8bit;
+use crate::stm32f4xx::core::delay::non_exact_time_delay;
 use crate::stm32f4xx::peripherals::gpiodef::{GPIOB, GPIOE};
 
-use crate::stm32f4xx::core::utils::i32_to_hex_str;
+use crate::stm32f4xx::core::utils::{i32_to_hex_str, i32_to_str};
 
 #[entry]
 fn main() -> ! {
@@ -44,10 +45,22 @@ fn main() -> ! {
 
     lcd1.set_cursor(12, 2);
 
-
     lcd1.print(i32_to_hex_str(255).as_str());
 
+    non_exact_time_delay(4000000);
+
+    lcd1.clear();
+
+    lcd1.set_cursor(1,1);
+
+    let mut count = 0u32;
+
     loop {
+        lcd1.set_cursor(1,1);
+        lcd1.clear();
+        lcd1.print(i32_to_str(count as i32).as_str());
+        non_exact_time_delay(40000);
+        count+=1;
 
     }
 }
